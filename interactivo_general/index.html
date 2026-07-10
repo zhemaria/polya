@@ -1,1 +1,1439 @@
+<!doctype html>
+<!--
+  Resolución de problemas paso a paso: el método de Pólya
+  Herramienta interactiva para estudiantes ASE/GED (Nivel 3)
+  Licencia: CC BY-NC-SA 4.0
+  Autor: José M. Fernández, ABE/ASE Math Master Teacher,
+         Harry S. Truman College — City Colleges of Chicago
+  https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resolución de problemas paso a paso: el método de Pólya</title>
+    <meta name="description" content="Herramienta interactiva para practicar el método de George Pólya de resolución de problemas, con registro escrito obligatorio de cada fase." />
+    <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago" />
+    <meta name="license" content="CC BY-NC-SA 4.0" />
+    <meta name="rights" content="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
+    <style>
+      :root {
+        --azul: #1e3a8a; /* Paso 1 Comprender */
+        --verde: #0f5132; /* Paso 2 Planear    */
+        --violeta: #5b21b6; /* Paso 3 Ejecutar   */
+        --ambar: #5c3900; /* Paso 4 Revisar    */
+        --tinta: #1a1a1a;
+        --tenue: #555555;
+        --linea: #cfcfcf;
+        --fondo: #f6f6f4;
+        --tarjeta: #ffffff;
+        --exito: #0f5132;
+        --alerta: #8a1f1f;
+        --bloqueo: #6b6b6b;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: Georgia, 'Times New Roman', serif;
+        color: var(--tinta);
+        background: var(--fondo);
+        line-height: 1.6;
+        font-size: 18px;
+      }
+      .contenedor {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 24px 18px 60px;
+      }
+      header.cabecera {
+        background: var(--tinta);
+        color: #fff;
+        padding: 28px 18px;
+        border-bottom: 6px solid var(--ambar);
+      }
+      header.cabecera .contenedor {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+      header.cabecera h1 {
+        font-size: 1.7rem;
+        margin: 0 0 6px;
+        line-height: 1.25;
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+      header.cabecera p {
+        margin: 0;
+        color: #e6e6e6;
+        font-size: 1rem;
+      }
+      h2 {
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+
+      /* ---- Panel de configuración ---- */
+      .config {
+        background: var(--tarjeta);
+        border: 1px solid var(--linea);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 24px;
+      }
+      .config h2 {
+        margin-top: 0;
+        font-size: 1.15rem;
+      }
+      .grupo-titulo {
+        font-weight: bold;
+        margin: 14px 0 8px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+      .cartas-nivel {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .carta-nivel {
+        flex: 1 1 200px;
+        border: 2px solid var(--linea);
+        border-radius: 10px;
+        padding: 12px 14px;
+        cursor: pointer;
+        background: #fbfbfb;
+        transition:
+          border-color 0.15s,
+          background 0.15s;
+      }
+      .carta-nivel:focus-visible {
+        outline: 3px solid var(--azul);
+        outline-offset: 2px;
+      }
+      .carta-nivel .n-nombre {
+        font-weight: bold;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: block;
+      }
+      .carta-nivel .n-desc {
+        font-size: 0.9rem;
+        color: var(--tenue);
+        display: block;
+        margin-top: 4px;
+      }
+      .carta-nivel[aria-pressed='true'] {
+        border-color: var(--azul);
+        background: #eef2ff;
+      }
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .chip {
+        border: 2px solid var(--linea);
+        border-radius: 999px;
+        padding: 6px 14px;
+        cursor: pointer;
+        background: #fff;
+        font-size: 0.92rem;
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+      .chip:focus-visible {
+        outline: 3px solid var(--azul);
+        outline-offset: 2px;
+      }
+      .chip[aria-pressed='true'] {
+        background: var(--tinta);
+        color: #fff;
+        border-color: var(--tinta);
+      }
+
+      .btn {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 22px;
+        cursor: pointer;
+        background: var(--azul);
+        color: #fff;
+        font-weight: bold;
+      }
+      .btn:hover {
+        filter: brightness(1.08);
+      }
+      .btn:focus-visible {
+        outline: 3px solid var(--ambar);
+        outline-offset: 2px;
+      }
+      .btn.secundario {
+        background: #fff;
+        color: var(--tinta);
+        border: 2px solid var(--tinta);
+      }
+      .btn.mini {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+      }
+      .fila-botones {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+
+      /* ---- Enunciado ---- */
+      .enunciado {
+        background: #fffef7;
+        border: 1px solid var(--linea);
+        border-left: 6px solid var(--ambar);
+        border-radius: 8px;
+        padding: 18px 20px;
+        margin-bottom: 22px;
+      }
+      .enunciado .etiqueta-tipo {
+        display: inline-block;
+        font-size: 0.8rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--tenue);
+        font-family: 'Segoe UI', Arial, sans-serif;
+        margin-bottom: 6px;
+      }
+      .enunciado p.texto {
+        font-size: 1.15rem;
+        margin: 0;
+      }
+
+      /* ---- Barra de progreso ---- */
+      .progreso {
+        display: flex;
+        gap: 6px;
+        margin: 0 0 20px;
+      }
+      .progreso .punto {
+        flex: 1;
+        height: 8px;
+        border-radius: 4px;
+        background: #dcdcdc;
+      }
+      .progreso .punto.activo {
+        background: var(--azul);
+      }
+      .progreso .punto.hecho {
+        background: var(--exito);
+      }
+
+      /* ---- Pasos ---- */
+      .paso {
+        border: 1px solid var(--linea);
+        border-radius: 10px;
+        margin-bottom: 16px;
+        overflow: hidden;
+        background: var(--tarjeta);
+      }
+      .paso-cab {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        cursor: pointer;
+        color: #fff;
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+      .paso-cab:focus-visible {
+        outline: 3px solid var(--ambar);
+        outline-offset: -3px;
+      }
+      .paso[data-fase='1'] .paso-cab {
+        background: var(--azul);
+      }
+      .paso[data-fase='2'] .paso-cab {
+        background: var(--verde);
+      }
+      .paso[data-fase='3'] .paso-cab {
+        background: var(--violeta);
+      }
+      .paso[data-fase='4'] .paso-cab {
+        background: var(--ambar);
+      }
+      .num-circulo {
+        flex: 0 0 34px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.22);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.05rem;
+      }
+      .paso-cab .titulo {
+        font-size: 1.1rem;
+        font-weight: bold;
+        flex: 1;
+      }
+      .paso-cab .estado {
+        font-size: 1.35rem;
+        line-height: 1;
+      }
+      .paso-cuerpo {
+        padding: 18px;
+        display: none;
+      }
+      .paso.abierto .paso-cuerpo {
+        display: block;
+      }
+      .paso.bloqueado .paso-cab {
+        background: var(--bloqueo);
+        cursor: not-allowed;
+      }
+      .paso.bloqueado .aviso-bloqueo {
+        display: block;
+        padding: 14px 18px;
+        color: var(--tenue);
+        font-style: italic;
+      }
+      .aviso-bloqueo {
+        display: none;
+      }
+      .paso.completo .paso-cab .estado::before {
+        content: '✓';
+      }
+
+      .campo {
+        margin-bottom: 16px;
+      }
+      .campo .rotulo {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 6px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+      .campo .ayuda {
+        display: block;
+        color: var(--tenue);
+        font-size: 0.92rem;
+        margin-bottom: 8px;
+      }
+      textarea,
+      input[type='text'] {
+        width: 100%;
+        font-family: Georgia, serif;
+        font-size: 1rem;
+        padding: 10px 12px;
+        border: 2px solid var(--linea);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--tinta);
+        resize: vertical;
+      }
+      textarea:focus,
+      input:focus {
+        outline: none;
+        border-color: var(--azul);
+      }
+      textarea {
+        min-height: 80px;
+      }
+      .contador {
+        font-size: 0.82rem;
+        color: var(--tenue);
+        margin-top: 4px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+      .contador.ok {
+        color: var(--exito);
+      }
+
+      /* checklist de datos (nivel guiado) */
+      .checklist {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .checklist li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        border: 1px solid var(--linea);
+        border-radius: 8px;
+        padding: 10px 12px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        background: #fbfbfb;
+      }
+      .checklist li:focus-visible {
+        outline: 3px solid var(--azul);
+        outline-offset: 2px;
+      }
+      .checklist .marca {
+        flex: 0 0 24px;
+        width: 24px;
+        height: 24px;
+        border: 2px solid var(--tenue);
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #fff;
+      }
+      .checklist li[aria-checked='true'] .marca {
+        background: var(--verde);
+        border-color: var(--verde);
+      }
+      .checklist li[aria-checked='true'] .marca::before {
+        content: '✓';
+      }
+
+      /* chips de estrategia */
+      .estrategias {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .estrategia-chip {
+        border: 2px solid var(--linea);
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+        background: #fff;
+        font-size: 0.92rem;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        position: relative;
+      }
+      .estrategia-chip:focus-visible {
+        outline: 3px solid var(--azul);
+        outline-offset: 2px;
+      }
+      .estrategia-chip[aria-pressed='true'] {
+        background: var(--verde);
+        color: #fff;
+        border-color: var(--verde);
+      }
+      .estrategia-chip .sugerida {
+        font-size: 0.7rem;
+        display: block;
+        color: var(--verde);
+        font-weight: bold;
+        margin-top: 2px;
+      }
+      .estrategia-chip[aria-pressed='true'] .sugerida {
+        color: #d4f5df;
+      }
+
+      .pista {
+        background: #eef2ff;
+        border: 1px solid #c7d2fe;
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin: 0 0 14px;
+        font-size: 0.95rem;
+      }
+      .pista strong {
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+
+      .respuesta-fila {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .respuesta-fila .unidad {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+      input.resp-num {
+        max-width: 180px;
+      }
+
+      .retro {
+        border-radius: 8px;
+        padding: 14px 16px;
+        margin-top: 14px;
+        font-size: 1rem;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        display: none;
+      }
+      .retro.ok {
+        background: #e7f5ec;
+        border: 1px solid var(--exito);
+        color: #0b3d24;
+        display: block;
+      }
+      .retro.no {
+        background: #fbeaea;
+        border: 1px solid var(--alerta);
+        color: #5a1414;
+        display: block;
+      }
+
+      .cierre {
+        background: var(--tarjeta);
+        border: 2px solid var(--exito);
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        display: none;
+      }
+      .cierre.visible {
+        display: block;
+      }
+      .cierre h2 {
+        margin-top: 0;
+        color: var(--exito);
+      }
+
+      footer.pie {
+        border-top: 1px solid var(--linea);
+        margin-top: 40px;
+        padding-top: 18px;
+        font-size: 0.85rem;
+        color: var(--tenue);
+        text-align: center;
+      }
+      footer.pie a {
+        color: var(--tenue);
+      }
+
+      .oculto {
+        display: none !important;
+      }
+
+      /* ---- Hoja de impresión ---- */
+      #hoja-impresion {
+        display: none;
+      }
+      @media print {
+        body {
+          background: #fff;
+          font-size: 12pt;
+        }
+        header.cabecera,
+        .config,
+        .progreso,
+        .pasos,
+        .cierre,
+        footer.pie,
+        .fila-botones {
+          display: none !important;
+        }
+        #hoja-impresion {
+          display: block;
+        }
+        #hoja-impresion h1 {
+          font-size: 16pt;
+        }
+        #hoja-impresion .caja-hoja {
+          border: 1px solid #000;
+          border-radius: 6px;
+          padding: 10px 12px;
+          margin-bottom: 10px;
+        }
+        #hoja-impresion .caja-hoja h3 {
+          margin: 0 0 6px;
+          font-size: 12pt;
+        }
+      }
+
+      @media (max-width: 560px) {
+        body {
+          font-size: 17px;
+        }
+        .cartas-nivel {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="cabecera">
+      <div class="contenedor">
+        <h1>Resolución de problemas paso a paso</h1>
+        <p>El método de George Pólya · comprender · planear · ejecutar · revisar</p>
+      </div>
+    </header>
+
+    <main class="contenedor">
+      <!-- Configuración -->
+      <section class="config" aria-labelledby="cfg-tit">
+        <h2 id="cfg-tit">Antes de empezar</h2>
+        <p>Elige un nivel de dificultad. En cada problema deberás escribir tu razonamiento en las cuatro fases; el paso siguiente solo se abre cuando completas el anterior.</p>
+
+        <div class="grupo-titulo" id="rot-nivel">Nivel de dificultad</div>
+        <div class="cartas-nivel" role="group" aria-labelledby="rot-nivel">
+          <div class="carta-nivel" role="button" tabindex="0" data-nivel="1" aria-pressed="true">
+            <span class="n-nombre">1 · Guiado</span>
+            <span class="n-desc">Ves todos los datos ordenados y recibes pistas en cada fase.</span>
+          </div>
+          <div class="carta-nivel" role="button" tabindex="0" data-nivel="2" aria-pressed="false">
+            <span class="n-nombre">2 · Intermedio</span>
+            <span class="n-desc">Tú extraes los datos. Menos pistas; tú decides el camino.</span>
+          </div>
+          <div class="carta-nivel" role="button" tabindex="0" data-nivel="3" aria-pressed="false">
+            <span class="n-nombre">3 · Autónomo</span>
+            <span class="n-desc">Sin pistas. Infieres cada paso y verificas tu respuesta.</span>
+          </div>
+        </div>
+
+        <div class="grupo-titulo" id="rot-tipo">Tipo de problema</div>
+        <div class="chips" role="group" aria-labelledby="rot-tipo" id="chips-tipo"></div>
+
+        <div class="fila-botones">
+          <button class="btn" id="btn-generar" type="button">Generar un problema</button>
+        </div>
+      </section>
+
+      <!-- Enunciado -->
+      <section id="zona-problema" class="oculto" aria-live="polite">
+        <div class="enunciado">
+          <span class="etiqueta-tipo" id="etq-tipo"></span>
+          <p class="texto" id="txt-enunciado"></p>
+        </div>
+
+        <div class="progreso" aria-hidden="true">
+          <div class="punto" data-p="1"></div>
+          <div class="punto" data-p="2"></div>
+          <div class="punto" data-p="3"></div>
+          <div class="punto" data-p="4"></div>
+        </div>
+
+        <div class="pasos" id="pasos"></div>
+
+        <div class="cierre" id="cierre" aria-live="polite">
+          <h2>Problema completado</h2>
+          <p id="cierre-msg"></p>
+          <div class="fila-botones">
+            <button class="btn" id="btn-otro" type="button">Generar otro problema</button>
+            <button class="btn secundario" id="btn-reintentar" type="button">Reintentar este problema</button>
+            <button class="btn secundario" id="btn-imprimir" type="button">Imprimir mi trabajo</button>
+          </div>
+        </div>
+      </section>
+
+      <footer class="pie">
+        <p>
+          Método de George Pólya (
+          <em>How to Solve It</em>
+          , 1945).
+        </p>
+        <p>
+          Obra de José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago. Bajo licencia
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license">CC BY-NC-SA 4.0</a>
+          .
+        </p>
+      </footer>
+    </main>
+
+    <!-- Hoja para imprimir -->
+    <div id="hoja-impresion"></div>
+
+    <script>
+      (function () {
+        'use strict';
+
+        /* ============ Utilidades ============ */
+        var ri = function (a, b) {
+          return Math.floor(Math.random() * (b - a + 1)) + a;
+        };
+        var pick = function (arr) {
+          return arr[Math.floor(Math.random() * arr.length)];
+        };
+        var money = function (n) {
+          return '$' + (Number.isInteger(n) ? n : n.toFixed(2));
+        };
+        var esc = function (s) {
+          return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        };
+
+        /* ============ Catálogo de estrategias ============ */
+        var ESTRATEGIAS = {
+          dibujo: 'Hacer un dibujo o diagrama',
+          patron: 'Buscar un patrón',
+          tabla: 'Hacer una tabla o lista organizada',
+          simplificar: 'Resolver un caso más simple primero',
+          atras: 'Trabajar hacia atrás',
+          tanteo: 'Tantear y ajustar',
+          ecuacion: 'Plantear una operación o ecuación',
+          proporcion: 'Usar una proporción (regla de tres)'
+        };
+
+        /* ============ Generadores de problemas ============ */
+        /* Cada generador recibe el nivel (1-3) y devuelve un objeto problema. */
+
+        var NOMBRES = ['Marta', 'Luis', 'Ana', 'Carlos', 'Rosa', 'Pedro', 'Elena', 'Jorge', 'Sofía', 'Raúl', 'Nidia', 'Tomás'];
+
+        function gPresupuesto(nivel) {
+          var n = ri(2, nivel === 1 ? 4 : 6);
+          var p = ri(3, nivel === 1 ? 9 : 15);
+          var q = ri(8, nivel === 1 ? 20 : 40);
+          var total = n * p + q + ri(5, 20);
+          var nombre = pick(NOMBRES);
+          var art = pick(['cuadernos', 'bolígrafos', 'carpetas', 'libretas']);
+          var otro = pick(['una mochila', 'una calculadora', 'un diccionario', 'un estuche']);
+          var resp = total - (n * p + q);
+          return {
+            tipo: 'Presupuesto y compras',
+            enunciado:
+              nombre +
+              ' tiene ' +
+              money(total) +
+              ' para útiles. Compra ' +
+              n +
+              ' ' +
+              art +
+              ' a ' +
+              money(p) +
+              ' la unidad y ' +
+              otro +
+              ' que cuesta ' +
+              money(q) +
+              '. ¿Cuánto dinero le queda después de las compras?',
+            incognita: 'el dinero que le queda a ' + nombre,
+            datos: ['Dinero disponible: ' + money(total), 'Compra ' + n + ' ' + art + ' a ' + money(p) + ' la unidad', otro.charAt(0).toUpperCase() + otro.slice(1) + ' cuesta ' + money(q)],
+            estrategia: 'ecuacion',
+            respuesta: resp,
+            unidad: '$',
+            tol: 0.01
+          };
+        }
+
+        function gProporcion(nivel) {
+          var n = ri(2, nivel === 1 ? 5 : 8);
+          var precioUnit = ri(2, nivel === 1 ? 9 : 20);
+          var C = n * precioUnit;
+          var m = ri(n + 1, nivel === 1 ? 10 : 24);
+          var resp = precioUnit * m;
+          var art = pick(['manzanas', 'panes', 'cuadernos', 'botellas de agua', 'huevos']);
+          return {
+            tipo: 'Proporción (regla de tres)',
+            enunciado: 'Si ' + n + ' ' + art + ' cuestan ' + money(C) + ', ¿cuánto costarán ' + m + ' ' + art + ' al mismo precio?',
+            incognita: 'el costo de ' + m + ' ' + art,
+            datos: [n + ' ' + art + ' cuestan ' + money(C), 'Se quiere el costo de ' + m + ' ' + art],
+            estrategia: 'proporcion',
+            respuesta: resp,
+            unidad: '$',
+            tol: 0.01
+          };
+        }
+
+        function gArea(nivel) {
+          var largo = ri(3, nivel === 1 ? 8 : 14);
+          var ancho = ri(2, nivel === 1 ? 6 : 12);
+          var costo = ri(4, nivel === 1 ? 12 : 30);
+          var resp = largo * ancho * costo;
+          var lugar = pick(['una cocina', 'una sala', 'un cuarto', 'un pasillo']);
+          return {
+            tipo: 'Área y costo (geometría)',
+            enunciado:
+              'El piso de ' +
+              lugar +
+              ' mide ' +
+              largo +
+              ' metros de largo por ' +
+              ancho +
+              ' metros de ancho. Colocar cerámica cuesta ' +
+              money(costo) +
+              ' por metro cuadrado. ¿Cuánto costará cubrir todo el piso?',
+            incognita: 'el costo total de la cerámica',
+            datos: ['Largo: ' + largo + ' m', 'Ancho: ' + ancho + ' m', 'Costo por metro cuadrado: ' + money(costo)],
+            estrategia: 'dibujo',
+            respuesta: resp,
+            unidad: '$',
+            tol: 0.01
+          };
+        }
+
+        function gDescuento(nivel) {
+          var base = ri(4, nivel === 1 ? 12 : 30) * 10; // múltiplos de 10 → limpio
+          var d = pick(nivel === 1 ? [10, 20, 25, 50] : [10, 15, 20, 25, 30, 40]);
+          var resp = base * (1 - d / 100);
+          var art = pick(['una chaqueta', 'un par de zapatos', 'una mochila', 'una lámpara', 'un abrigo']);
+          return {
+            tipo: 'Porcentaje y descuento',
+            enunciado: 'En una tienda, ' + art + ' cuesta ' + money(base) + '. Hoy tiene un descuento del ' + d + '%. ¿Cuál es el precio final que se paga?',
+            incognita: 'el precio final con el descuento aplicado',
+            datos: ['Precio original: ' + money(base), 'Descuento: ' + d + '%'],
+            estrategia: 'ecuacion',
+            respuesta: Math.round(resp * 100) / 100,
+            unidad: '$',
+            tol: 0.01
+          };
+        }
+
+        function gPromedio(nivel) {
+          var meta = ri(7, 9) * 10; // 70,80,90
+          var a = ri(60, 95),
+            b = ri(60, 95),
+            c = ri(60, 95);
+          var resp = 4 * meta - (a + b + c);
+          // reintentar si la nota necesaria queda fuera de 0-100
+          var intentos = 0;
+          while ((resp < 0 || resp > 100) && intentos < 40) {
+            a = ri(60, 95);
+            b = ri(60, 95);
+            c = ri(60, 95);
+            resp = 4 * meta - (a + b + c);
+            intentos++;
+          }
+          var nombre = pick(NOMBRES);
+          return {
+            tipo: 'Promedio (trabajar hacia atrás)',
+            enunciado:
+              nombre +
+              ' tiene tres calificaciones: ' +
+              a +
+              ', ' +
+              b +
+              ' y ' +
+              c +
+              '. Quiere que el promedio de sus cuatro calificaciones sea exactamente ' +
+              meta +
+              '. ¿Qué calificación necesita en el cuarto examen?',
+            incognita: 'la calificación necesaria en el cuarto examen',
+            datos: ['Calificaciones actuales: ' + a + ', ' + b + ', ' + c, 'Promedio deseado de las cuatro: ' + meta],
+            estrategia: 'atras',
+            respuesta: resp,
+            unidad: 'puntos',
+            tol: 0.01
+          };
+        }
+
+        function gVelocidad(nivel) {
+          var v = ri(3, nivel === 1 ? 8 : 12) * 10; // 30..120
+          var h = ri(2, nivel === 1 ? 4 : 6);
+          var D = v * h;
+          var nombre = pick(NOMBRES);
+          return {
+            tipo: 'Distancia, velocidad y tiempo',
+            enunciado: nombre + ' recorre ' + D + ' kilómetros en ' + h + ' horas conduciendo a velocidad constante. ¿A qué velocidad promedio viaja, en kilómetros por hora?',
+            incognita: 'la velocidad promedio en km/h',
+            datos: ['Distancia: ' + D + ' km', 'Tiempo: ' + h + ' horas'],
+            estrategia: 'ecuacion',
+            respuesta: v,
+            unidad: 'km/h',
+            tol: 0.01
+          };
+        }
+
+        function gPatron(nivel) {
+          var inicio = ri(2, nivel === 1 ? 6 : 12);
+          var dif = ri(2, nivel === 1 ? 5 : 9);
+          var k = ri(6, nivel === 1 ? 9 : 14);
+          var resp = inicio + (k - 1) * dif;
+          var contexto = pick([
+            {t: 'Una planta mide', u: 'cm'},
+            {t: 'En una alcancía hay', u: 'pesos'},
+            {t: 'Una fila de sillas empieza con', u: 'sillas'}
+          ]);
+          return {
+            tipo: 'Patrón y secuencia',
+            enunciado:
+              'Una secuencia comienza en ' +
+              inicio +
+              ' y aumenta ' +
+              dif +
+              ' cada vez: ' +
+              inicio +
+              ', ' +
+              (inicio + dif) +
+              ', ' +
+              (inicio + 2 * dif) +
+              ', ' +
+              (inicio + 3 * dif) +
+              ', … ¿Cuál es el término número ' +
+              k +
+              ' de la secuencia?',
+            incognita: 'el valor del término número ' + k,
+            datos: ['Primer término: ' + inicio, 'Aumento constante: ' + dif, 'Se busca el término número ' + k],
+            estrategia: 'patron',
+            respuesta: resp,
+            unidad: '',
+            tol: 0.01
+          };
+        }
+
+        function gEdad(nivel) {
+          var m = ri(3, nivel === 1 ? 9 : 18);
+          var edad = ri(12, 60);
+          var R = 2 * edad - m;
+          var nombre = pick(NOMBRES);
+          return {
+            tipo: 'Trabajar hacia atrás (edades)',
+            enunciado: 'Si al doble de la edad de ' + nombre + ' le restas ' + m + ', obtienes ' + R + '. ¿Cuántos años tiene ' + nombre + '?',
+            incognita: 'la edad de ' + nombre,
+            datos: ['El doble de la edad, menos ' + m + ', es igual a ' + R],
+            estrategia: 'atras',
+            respuesta: edad,
+            unidad: 'años',
+            tol: 0.01
+          };
+        }
+
+        var GENERADORES = [
+          {clave: 'presupuesto', nombre: 'Compras', fn: gPresupuesto},
+          {clave: 'proporcion', nombre: 'Proporción', fn: gProporcion},
+          {clave: 'area', nombre: 'Áreas', fn: gArea},
+          {clave: 'descuento', nombre: 'Descuentos', fn: gDescuento},
+          {clave: 'promedio', nombre: 'Promedios', fn: gPromedio},
+          {clave: 'velocidad', nombre: 'Velocidad', fn: gVelocidad},
+          {clave: 'patron', nombre: 'Patrones', fn: gPatron},
+          {clave: 'edad', nombre: 'Hacia atrás', fn: gEdad}
+        ];
+
+        /* ============ Estado ============ */
+        var estado = {
+          nivel: 1,
+          tipo: 'aleatorio',
+          problema: null,
+          minChars: {1: 12, 2: 18, 3: 25},
+          resueltoCorrecto: false
+        };
+
+        /* ============ Configuración: nivel y tipo ============ */
+        var cartas = document.querySelectorAll('.carta-nivel');
+        cartas.forEach(function (c) {
+          var activar = function () {
+            cartas.forEach(function (x) {
+              x.setAttribute('aria-pressed', 'false');
+            });
+            c.setAttribute('aria-pressed', 'true');
+            estado.nivel = parseInt(c.getAttribute('data-nivel'), 10);
+          };
+          c.addEventListener('click', activar);
+          c.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              activar();
+            }
+          });
+        });
+
+        // chips de tipo
+        var contChips = document.getElementById('chips-tipo');
+        (function pintarChips() {
+          var lista = [{clave: 'aleatorio', nombre: 'Aleatorio'}].concat(GENERADORES);
+          lista.forEach(function (g) {
+            var chip = document.createElement('div');
+            chip.className = 'chip';
+            chip.setAttribute('role', 'button');
+            chip.setAttribute('tabindex', '0');
+            chip.setAttribute('aria-pressed', g.clave === 'aleatorio' ? 'true' : 'false');
+            chip.setAttribute('data-clave', g.clave);
+            chip.textContent = g.nombre;
+            var sel = function () {
+              contChips.querySelectorAll('.chip').forEach(function (x) {
+                x.setAttribute('aria-pressed', 'false');
+              });
+              chip.setAttribute('aria-pressed', 'true');
+              estado.tipo = g.clave;
+            };
+            chip.addEventListener('click', sel);
+            chip.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                sel();
+              }
+            });
+            contChips.appendChild(chip);
+          });
+        })();
+
+        /* ============ Generar problema ============ */
+        function nuevoProblema() {
+          var gen;
+          if (estado.tipo === 'aleatorio') {
+            gen = pick(GENERADORES);
+          } else {
+            gen = GENERADORES.filter(function (g) {
+              return g.clave === estado.tipo;
+            })[0];
+          }
+          estado.problema = gen.fn(estado.nivel);
+          estado.resueltoCorrecto = false;
+          document.getElementById('zona-problema').classList.remove('oculto');
+          document.getElementById('cierre').classList.remove('visible');
+          document.getElementById('etq-tipo').textContent = estado.problema.tipo;
+          document.getElementById('txt-enunciado').textContent = estado.problema.enunciado;
+          construirPasos();
+          document.getElementById('zona-problema').scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+
+        /* ============ Construcción de las 4 fases ============ */
+        var contPasos = document.getElementById('pasos');
+
+        function construirPasos() {
+          contPasos.innerHTML = '';
+          var nivel = estado.nivel;
+          var min = estado.minChars[nivel];
+          var pr = estado.problema;
+
+          // ---- Fase 1: COMPRENDER ----
+          var f1 = fase(1, 'Comprender el problema');
+          var cuerpo1 = f1.querySelector('.paso-cuerpo');
+          if (nivel === 1) {
+            cuerpo1.appendChild(pista('Empieza por lo básico: ¿qué te preguntan y qué números te dan? No calcules todavía.'));
+          }
+          cuerpo1.appendChild(campoTexto('f1-incog', '¿Qué te piden? (la incógnita)', nivel === 1 ? 'Escribe con tus palabras qué debes averiguar.' : '', 'textarea', min));
+
+          if (nivel === 1) {
+            // checklist de datos provistos
+            var wrap = document.createElement('div');
+            wrap.className = 'campo';
+            var rot = document.createElement('span');
+            rot.className = 'rotulo';
+            rot.id = 'rot-datos';
+            rot.textContent = '¿Qué datos tienes? (marca cada uno para confirmar que lo identificaste)';
+            wrap.appendChild(rot);
+            var ul = document.createElement('ul');
+            ul.className = 'checklist';
+            ul.setAttribute('role', 'group');
+            ul.setAttribute('aria-labelledby', 'rot-datos');
+            ul.setAttribute('data-req', 'checklist');
+            pr.datos.forEach(function (d, i) {
+              var li = document.createElement('li');
+              li.setAttribute('role', 'checkbox');
+              li.setAttribute('tabindex', '0');
+              li.setAttribute('aria-checked', 'false');
+              li.innerHTML = '<span class="marca" aria-hidden="true"></span><span>' + esc(d) + '</span>';
+              var tog = function () {
+                var on = li.getAttribute('aria-checked') === 'true';
+                li.setAttribute('aria-checked', on ? 'false' : 'true');
+                refrescar();
+              };
+              li.addEventListener('click', tog);
+              li.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  tog();
+                }
+              });
+              ul.appendChild(li);
+            });
+            wrap.appendChild(ul);
+            cuerpo1.appendChild(wrap);
+          } else {
+            cuerpo1.appendChild(campoTexto('f1-datos', '¿Qué datos tienes?', nivel === 2 ? 'Enumera los números y las cantidades que aparecen en el problema.' : '', 'textarea', min));
+          }
+          cuerpo1.appendChild(botonContinuar(1));
+          contPasos.appendChild(f1);
+
+          // ---- Fase 2: PLANEAR ----
+          var f2 = fase(2, 'Concebir un plan');
+          var cuerpo2 = f2.querySelector('.paso-cuerpo');
+          if (nivel === 1) {
+            cuerpo2.appendChild(pista('Elige una estrategia del menú. La marcada como sugerida suele funcionar bien para este tipo de problema.'));
+          }
+          // menú de estrategias
+          var campoEst = document.createElement('div');
+          campoEst.className = 'campo';
+          var rotEst = document.createElement('span');
+          rotEst.className = 'rotulo';
+          rotEst.id = 'rot-est';
+          rotEst.textContent = 'Elige una estrategia (al menos una)';
+          campoEst.appendChild(rotEst);
+          var cont = document.createElement('div');
+          cont.className = 'estrategias';
+          cont.setAttribute('role', 'group');
+          cont.setAttribute('aria-labelledby', 'rot-est');
+          cont.setAttribute('data-req', 'estrategia');
+          Object.keys(ESTRATEGIAS).forEach(function (k) {
+            var chip = document.createElement('div');
+            chip.className = 'estrategia-chip';
+            chip.setAttribute('role', 'button');
+            chip.setAttribute('tabindex', '0');
+            chip.setAttribute('aria-pressed', 'false');
+            chip.setAttribute('data-k', k);
+            var etiqueta = ESTRATEGIAS[k];
+            chip.innerHTML = '<span>' + esc(etiqueta) + '</span>' + (nivel === 1 && k === pr.estrategia ? '<span class="sugerida">sugerida</span>' : '');
+            var tog = function () {
+              var on = chip.getAttribute('aria-pressed') === 'true';
+              chip.setAttribute('aria-pressed', on ? 'false' : 'true');
+              refrescar();
+            };
+            chip.addEventListener('click', tog);
+            chip.addEventListener('keydown', function (e) {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                tog();
+              }
+            });
+            cont.appendChild(chip);
+          });
+          campoEst.appendChild(cont);
+          cuerpo2.appendChild(campoEst);
+          cuerpo2.appendChild(campoTexto('f2-plan', 'Describe tu plan con tus palabras', nivel === 1 ? 'Por ejemplo: “Primero voy a sumar…, después voy a restar…”.' : '', 'textarea', min));
+          cuerpo2.appendChild(botonContinuar(2));
+          contPasos.appendChild(f2);
+
+          // ---- Fase 3: EJECUTAR ----
+          var f3 = fase(3, 'Ejecutar el plan');
+          var cuerpo3 = f3.querySelector('.paso-cuerpo');
+          if (nivel === 1) {
+            cuerpo3.appendChild(pista('Escribe cada operación en orden y revisa que cada paso sea correcto antes de seguir.'));
+          }
+          cuerpo3.appendChild(campoTexto('f3-proc', 'Muestra tu procedimiento', nivel === 1 ? 'Escribe las operaciones que hiciste, paso por paso.' : '', 'textarea', min));
+          // respuesta numérica
+          var campoResp = document.createElement('div');
+          campoResp.className = 'campo';
+          var rotR = document.createElement('span');
+          rotR.className = 'rotulo';
+          rotR.id = 'rot-resp';
+          rotR.textContent = 'Respuesta final';
+          campoResp.appendChild(rotR);
+          var fila = document.createElement('div');
+          fila.className = 'respuesta-fila';
+          if (pr.unidad === '$') {
+            var u1 = document.createElement('span');
+            u1.className = 'unidad';
+            u1.textContent = '$';
+            u1.setAttribute('aria-hidden', 'true');
+            fila.appendChild(u1);
+          }
+          var inp = document.createElement('input');
+          inp.type = 'text';
+          inp.className = 'resp-num';
+          inp.id = 'f3-resp';
+          inp.setAttribute('inputmode', 'decimal');
+          inp.setAttribute('aria-labelledby', 'rot-resp');
+          inp.setAttribute('data-req', 'num');
+          inp.addEventListener('input', refrescar);
+          fila.appendChild(inp);
+          if (pr.unidad && pr.unidad !== '$') {
+            var u2 = document.createElement('span');
+            u2.className = 'unidad';
+            u2.textContent = pr.unidad;
+            fila.appendChild(u2);
+          }
+          campoResp.appendChild(fila);
+          cuerpo3.appendChild(campoResp);
+          cuerpo3.appendChild(botonContinuar(3));
+          contPasos.appendChild(f3);
+
+          // ---- Fase 4: REVISAR ----
+          var f4 = fase(4, 'Mirar hacia atrás');
+          var cuerpo4 = f4.querySelector('.paso-cuerpo');
+          if (nivel === 1) {
+            cuerpo4.appendChild(pista('Comprueba tu resultado: ¿tiene sentido? ¿Puedes verificarlo con otra operación (por ejemplo, sumando en vez de restar)?'));
+          }
+          cuerpo4.appendChild(
+            campoTexto('f4-rev', '¿Cómo compruebas que tu respuesta es correcta? ¿Tiene sentido en la situación?', nivel === 1 ? 'Explica cómo verificaste el resultado.' : '', 'textarea', min)
+          );
+          var btnRev = document.createElement('button');
+          btnRev.className = 'btn';
+          btnRev.type = 'button';
+          btnRev.textContent = 'Comprobar mi respuesta';
+          btnRev.id = 'btn-comprobar';
+          btnRev.addEventListener('click', comprobar);
+          cuerpo4.appendChild(btnRev);
+          var retro = document.createElement('div');
+          retro.className = 'retro';
+          retro.id = 'retro';
+          retro.setAttribute('aria-live', 'polite');
+          cuerpo4.appendChild(retro);
+          contPasos.appendChild(f4);
+
+          // abrir la primera fase, bloquear el resto
+          abrirFase(1);
+          [2, 3, 4].forEach(bloquearFase);
+          actualizarProgreso();
+        }
+
+        /* ---- fábricas de nodos ---- */
+        function fase(n, titulo) {
+          var div = document.createElement('div');
+          div.className = 'paso';
+          div.setAttribute('data-fase', String(n));
+          var tituloFase = {1: 'Comprender', 2: 'Planear', 3: 'Ejecutar', 4: 'Revisar'}[n];
+          div.innerHTML =
+            '<div class="paso-cab" role="button" tabindex="0" aria-expanded="false" aria-controls="cuerpo-' +
+            n +
+            '">' +
+            '<span class="num-circulo" aria-hidden="true">' +
+            n +
+            '</span>' +
+            '<span class="titulo">Paso ' +
+            n +
+            ': ' +
+            esc(titulo) +
+            '</span>' +
+            '<span class="estado" aria-hidden="true"></span>' +
+            '</div>' +
+            '<div class="aviso-bloqueo">Completa el paso anterior para desbloquear esta fase.</div>' +
+            '<div class="paso-cuerpo" id="cuerpo-' +
+            n +
+            '"></div>';
+          var cab = div.querySelector('.paso-cab');
+          var toggle = function () {
+            if (div.classList.contains('bloqueado')) return;
+            var abierto = div.classList.toggle('abierto');
+            cab.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+          };
+          cab.addEventListener('click', toggle);
+          cab.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggle();
+            }
+          });
+          return div;
+        }
+
+        function campoTexto(id, rotulo, ayuda, tipo, min) {
+          var div = document.createElement('div');
+          div.className = 'campo';
+          var rot = document.createElement('span');
+          rot.className = 'rotulo';
+          rot.id = 'rot-' + id;
+          rot.textContent = rotulo;
+          div.appendChild(rot);
+          if (ayuda) {
+            var a = document.createElement('span');
+            a.className = 'ayuda';
+            a.textContent = ayuda;
+            div.appendChild(a);
+          }
+          var ta = document.createElement('textarea');
+          ta.id = id;
+          ta.setAttribute('aria-labelledby', 'rot-' + id);
+          ta.setAttribute('data-req', 'texto');
+          ta.setAttribute('data-min', String(min));
+          div.appendChild(ta);
+          var cont = document.createElement('div');
+          cont.className = 'contador';
+          cont.id = 'cont-' + id;
+          cont.textContent = 'Mínimo ' + min + ' caracteres.';
+          div.appendChild(cont);
+          ta.addEventListener('input', function () {
+            var len = ta.value.trim().length;
+            if (len >= min) {
+              cont.classList.add('ok');
+              cont.textContent = 'Listo (' + len + ' caracteres).';
+            } else {
+              cont.classList.remove('ok');
+              cont.textContent = 'Te faltan ' + (min - len) + ' caracteres.';
+            }
+            refrescar();
+          });
+          return div;
+        }
+
+        function pista(txt) {
+          var d = document.createElement('div');
+          d.className = 'pista';
+          d.innerHTML = '<strong>Pista:</strong> ' + esc(txt);
+          return d;
+        }
+
+        function botonContinuar(n) {
+          var b = document.createElement('button');
+          b.className = 'btn';
+          b.type = 'button';
+          b.textContent = 'Continuar al paso ' + (n + 1);
+          b.setAttribute('data-continuar', String(n));
+          b.disabled = true;
+          b.addEventListener('click', function () {
+            desbloquearFase(n + 1);
+            abrirFase(n + 1);
+            var sig = contPasos.querySelector('.paso[data-fase="' + (n + 1) + '"]');
+            if (sig) sig.scrollIntoView({behavior: 'smooth', block: 'center'});
+          });
+          return b;
+        }
+
+        /* ---- lógica de bloqueo/apertura ---- */
+        function faseNodo(n) {
+          return contPasos.querySelector('.paso[data-fase="' + n + '"]');
+        }
+        function abrirFase(n) {
+          var f = faseNodo(n);
+          if (!f) return;
+          f.classList.add('abierto');
+          f.querySelector('.paso-cab').setAttribute('aria-expanded', 'true');
+        }
+        function bloquearFase(n) {
+          var f = faseNodo(n);
+          if (!f) return;
+          f.classList.add('bloqueado');
+          f.classList.remove('abierto');
+          f.querySelector('.paso-cab').setAttribute('aria-expanded', 'false');
+        }
+        function desbloquearFase(n) {
+          var f = faseNodo(n);
+          if (!f) return;
+          f.classList.remove('bloqueado');
+        }
+
+        /* ---- validación de fases ---- */
+        function faseCompleta(n) {
+          var f = faseNodo(n);
+          if (!f) return false;
+          var ok = true;
+          // textos
+          f.querySelectorAll('[data-req="texto"]').forEach(function (ta) {
+            var min = parseInt(ta.getAttribute('data-min'), 10);
+            if (ta.value.trim().length < min) ok = false;
+          });
+          // checklist
+          f.querySelectorAll('[data-req="checklist"]').forEach(function (ul) {
+            var items = ul.querySelectorAll('[role="checkbox"]');
+            items.forEach(function (li) {
+              if (li.getAttribute('aria-checked') !== 'true') ok = false;
+            });
+          });
+          // estrategia (al menos una)
+          f.querySelectorAll('[data-req="estrategia"]').forEach(function (cont) {
+            var alguna = cont.querySelector('.estrategia-chip[aria-pressed="true"]');
+            if (!alguna) ok = false;
+          });
+          // número
+          f.querySelectorAll('[data-req="num"]').forEach(function (inp) {
+            var v = inp.value.trim().replace(',', '.');
+            if (v === '' || isNaN(parseFloat(v))) ok = false;
+          });
+          return ok;
+        }
+
+        function refrescar() {
+          [1, 2, 3].forEach(function (n) {
+            var f = faseNodo(n);
+            if (!f) return;
+            var btn = f.querySelector('[data-continuar]');
+            var completa = faseCompleta(n);
+            if (btn) btn.disabled = !completa;
+            f.classList.toggle('completo', completa);
+          });
+          // fase 4: marca completa cuando el texto de revisión está listo
+          var f4 = faseNodo(4);
+          if (f4) f4.classList.toggle('completo', faseCompleta(4));
+          actualizarProgreso();
+        }
+
+        function actualizarProgreso() {
+          var puntos = document.querySelectorAll('.progreso .punto');
+          puntos.forEach(function (p) {
+            var n = parseInt(p.getAttribute('data-p'), 10);
+            var f = faseNodo(n);
+            p.classList.remove('activo', 'hecho');
+            if (f && f.classList.contains('completo')) p.classList.add('hecho');
+            else if (f && f.classList.contains('abierto')) p.classList.add('activo');
+          });
+        }
+
+        /* ---- comprobar respuesta (fase 4) ---- */
+        function comprobar() {
+          if (!faseCompleta(4)) {
+            var r0 = document.getElementById('retro');
+            r0.className = 'retro no';
+            r0.textContent = 'Antes de comprobar, escribe cómo verificaste tu respuesta.';
+            return;
+          }
+          var inp = document.getElementById('f3-resp');
+          var v = parseFloat(inp.value.trim().replace(',', '.'));
+          var pr = estado.problema;
+          var retro = document.getElementById('retro');
+          var correcto = Math.abs(v - pr.respuesta) <= (pr.tol || 0.01);
+          estado.resueltoCorrecto = correcto;
+          if (correcto) {
+            retro.className = 'retro ok';
+            retro.textContent = '¡Correcto! Tu respuesta es ' + formatoResp(pr) + '. Completaste las cuatro fases del método.';
+          } else {
+            retro.className = 'retro no';
+            retro.textContent = 'Tu respuesta no coincide. La respuesta correcta es ' + formatoResp(pr) + '. Vuelve a la fase 3, revisa tu procedimiento y corrige.';
+          }
+          mostrarCierre(correcto);
+        }
+
+        function formatoResp(pr) {
+          if (pr.unidad === '$') return money(pr.respuesta);
+          return pr.respuesta + (pr.unidad ? ' ' + pr.unidad : '');
+        }
+
+        function mostrarCierre(correcto) {
+          var c = document.getElementById('cierre');
+          c.classList.add('visible');
+          document.getElementById('cierre-msg').textContent = correcto
+            ? 'Excelente trabajo: comprendiste, planeaste, ejecutaste y verificaste. Ese es el método completo de Pólya.'
+            : 'Registraste tu proceso en las cuatro fases. Puedes reintentar el problema aplicando la corrección, o generar uno nuevo.';
+          c.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        /* ---- imprimir el trabajo ---- */
+        function valor(id) {
+          var e = document.getElementById(id);
+          return e ? e.value.trim() : '';
+        }
+        function estrategiasElegidas() {
+          var arr = [];
+          contPasos.querySelectorAll('.estrategia-chip[aria-pressed="true"]').forEach(function (ch) {
+            arr.push(ESTRATEGIAS[ch.getAttribute('data-k')]);
+          });
+          return arr.join(', ');
+        }
+        function datosNivel1() {
+          var arr = [];
+          contPasos.querySelectorAll('.checklist [role="checkbox"]').forEach(function (li) {
+            arr.push(li.textContent.trim());
+          });
+          return arr.join('; ');
+        }
+        function imprimir() {
+          var pr = estado.problema;
+          if (!pr) return;
+          var datos = valor('f1-datos') || datosNivel1() || '(marcados en la lista)';
+          var h = document.getElementById('hoja-impresion');
+          h.innerHTML =
+            '<h1>Mi trabajo con el método de Pólya</h1>' +
+            '<p><strong>Problema:</strong> ' +
+            esc(pr.enunciado) +
+            '</p>' +
+            '<div class="caja-hoja"><h3>1. Comprender</h3>' +
+            '<p><strong>Incógnita:</strong> ' +
+            esc(valor('f1-incog')) +
+            '</p>' +
+            '<p><strong>Datos:</strong> ' +
+            esc(datos) +
+            '</p></div>' +
+            '<div class="caja-hoja"><h3>2. Planear</h3>' +
+            '<p><strong>Estrategia:</strong> ' +
+            esc(estrategiasElegidas()) +
+            '</p>' +
+            '<p><strong>Plan:</strong> ' +
+            esc(valor('f2-plan')) +
+            '</p></div>' +
+            '<div class="caja-hoja"><h3>3. Ejecutar</h3>' +
+            '<p><strong>Procedimiento:</strong> ' +
+            esc(valor('f3-proc')) +
+            '</p>' +
+            '<p><strong>Respuesta:</strong> ' +
+            esc(valor('f3-resp')) +
+            ' ' +
+            esc(pr.unidad) +
+            '</p></div>' +
+            '<div class="caja-hoja"><h3>4. Revisar</h3>' +
+            '<p><strong>Comprobación:</strong> ' +
+            esc(valor('f4-rev')) +
+            '</p></div>';
+          window.print();
+        }
+
+        /* ============ Botones globales ============ */
+        document.getElementById('btn-generar').addEventListener('click', nuevoProblema);
+        document.getElementById('btn-otro').addEventListener('click', nuevoProblema);
+        document.getElementById('btn-reintentar').addEventListener('click', function () {
+          // mismo problema, limpiar respuestas
+          var pr = estado.problema;
+          if (!pr) return;
+          construirPasos();
+          document.getElementById('cierre').classList.remove('visible');
+          document.getElementById('zona-problema').scrollIntoView({behavior: 'smooth', block: 'start'});
+        });
+        document.getElementById('btn-imprimir').addEventListener('click', imprimir);
+      })();
+    </script>
+  </body>
+</html>
 
