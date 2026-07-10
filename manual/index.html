@@ -1,1 +1,780 @@
+<!doctype html>
+<!--
+  Estrategias de resolución de problemas: el método de George Pólya — manual del docente
+  Material de apoyo para el/la docente (ASE/GED, Nivel 3)
+  Licencia: CC BY-NC-SA 4.0
+  Autor: José M. Fernández, ABE/ASE Math Master Teacher,
+         Harry S. Truman College — City Colleges of Chicago
+  https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estrategias de resolución de problemas: el método de George Pólya — manual del docente</title>
+    <meta
+      name="description"
+      content="Manual del docente para enseñar el método de resolución de problemas de George Pólya: las cuatro fases, heurísticas, estrategias de aula, niveles de dificultad y rúbrica." />
+    <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago" />
+    <meta name="license" content="CC BY-NC-SA 4.0" />
+    <meta name="rights" content="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
+    <style>
+      :root {
+        --azul: #1e3a8a;
+        --verde: #0f5132;
+        --violeta: #5b21b6;
+        --ambar: #5c3900;
+        --tinta: #1a1a1a;
+        --tenue: #555555;
+        --linea: #cfcfcf;
+        --fondo: #f6f6f4;
+        --tarjeta: #ffffff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: Georgia, 'Times New Roman', serif;
+        color: var(--tinta);
+        background: var(--fondo);
+        line-height: 1.65;
+        font-size: 18px;
+      }
+      .contenedor {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 0 18px;
+      }
+      header.cabecera {
+        background: var(--tinta);
+        color: #fff;
+        padding: 34px 18px;
+        border-bottom: 6px solid var(--ambar);
+      }
+      header.cabecera h1 {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        font-size: 1.7rem;
+        margin: 0 0 8px;
+        line-height: 1.25;
+      }
+      header.cabecera .sub {
+        color: #e6e6e6;
+        margin: 0;
+        font-size: 1.02rem;
+      }
+      header.cabecera .meta {
+        color: #bdbdbd;
+        margin: 10px 0 0;
+        font-size: 0.9rem;
+      }
+
+      h2,
+      h3 {
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+
+      .caja-objetivos {
+        background: #eef2ff;
+        border: 1px solid #c7d2fe;
+        border-radius: 10px;
+        padding: 18px 20px;
+        margin: 26px 0;
+      }
+      .caja-objetivos h2 {
+        margin-top: 0;
+        font-size: 1.15rem;
+        color: var(--azul);
+      }
+      .caja-objetivos ul {
+        margin: 8px 0 0;
+        padding-left: 22px;
+      }
+      .caja-objetivos li {
+        margin-bottom: 6px;
+      }
+
+      /* Índice */
+      nav.toc {
+        background: var(--tarjeta);
+        border: 1px solid var(--linea);
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin: 22px 0;
+      }
+      nav.toc h2 {
+        margin: 0 0 8px;
+        font-size: 1.1rem;
+      }
+      nav.toc ol {
+        margin: 0;
+        padding-left: 22px;
+      }
+      nav.toc li {
+        margin-bottom: 5px;
+      }
+      nav.toc a {
+        color: var(--azul);
+        text-decoration: none;
+      }
+      nav.toc a:hover,
+      nav.toc a:focus {
+        text-decoration: underline;
+      }
+
+      .controles {
+        display: flex;
+        gap: 10px;
+        margin: 16px 0 24px;
+        flex-wrap: wrap;
+      }
+      .btn {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        font-size: 0.95rem;
+        border: 2px solid var(--tinta);
+        background: #fff;
+        color: var(--tinta);
+        border-radius: 8px;
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: var(--tinta);
+        color: #fff;
+      }
+      .btn:focus-visible {
+        outline: 3px solid var(--ambar);
+        outline-offset: 2px;
+      }
+
+      /* Secciones acordeón */
+      details.seccion-grande {
+        background: var(--tarjeta);
+        border: 1px solid var(--linea);
+        border-radius: 10px;
+        margin-bottom: 16px;
+        overflow: hidden;
+      }
+      details.seccion-grande > summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        font-weight: bold;
+        font-size: 1.15rem;
+        background: #f0f0ee;
+      }
+      details.seccion-grande > summary::-webkit-details-marker {
+        display: none;
+      }
+      details.seccion-grande > summary:focus-visible {
+        outline: 3px solid var(--azul);
+        outline-offset: -3px;
+      }
+      .circulo {
+        flex: 0 0 38px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--azul);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+      }
+      details.seccion-grande[open] > summary {
+        border-bottom: 1px solid var(--linea);
+      }
+      .cuerpo-seccion {
+        padding: 18px 22px;
+      }
+      .cuerpo-seccion h3 {
+        margin-top: 22px;
+        color: var(--tinta);
+      }
+      .cuerpo-seccion h3:first-child {
+        margin-top: 0;
+      }
+      .cuerpo-seccion p {
+        margin: 0 0 12px;
+      }
+
+      /* Colores de círculo por fase donde aplica */
+      .c-azul {
+        background: var(--azul);
+      }
+      .c-verde {
+        background: var(--verde);
+      }
+      .c-violeta {
+        background: var(--violeta);
+      }
+      .c-ambar {
+        background: var(--ambar);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 14px 0 20px;
+        font-size: 0.97rem;
+      }
+      caption {
+        text-align: left;
+        font-style: italic;
+        color: var(--tenue);
+        margin-bottom: 8px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+      th,
+      td {
+        border: 1px solid var(--linea);
+        padding: 10px 12px;
+        vertical-align: top;
+        text-align: left;
+      }
+      thead th {
+        background: #ececea;
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+      tbody th {
+        background: #f7f7f5;
+        font-weight: bold;
+      }
+
+      .fase-titulo {
+        display: inline-block;
+        color: #fff;
+        padding: 2px 10px;
+        border-radius: 6px;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        font-size: 0.9rem;
+      }
+      .destacado {
+        background: #fffef7;
+        border-left: 5px solid var(--ambar);
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin: 14px 0;
+      }
+      .destacado strong {
+        font-family: 'Segoe UI', Arial, sans-serif;
+      }
+
+      ul.limpia {
+        padding-left: 22px;
+      }
+      ul.limpia li {
+        margin-bottom: 8px;
+      }
+
+      footer.pie {
+        border-top: 1px solid var(--linea);
+        margin: 36px 0 0;
+        padding: 20px 0 50px;
+        font-size: 0.85rem;
+        color: var(--tenue);
+        text-align: center;
+      }
+      footer.pie a {
+        color: var(--tenue);
+      }
+
+      @media (max-width: 560px) {
+        body {
+          font-size: 17px;
+        }
+        details.seccion-grande > summary {
+          font-size: 1.05rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="cabecera">
+      <div class="contenedor">
+        <h1>Estrategias de resolución de problemas: el método de George Pólya</h1>
+        <p class="sub">Manual del docente · ASE/GED, Nivel 3</p>
+        <p class="meta">Material de apoyo para la unidad de estrategias de resolución de problemas.</p>
+      </div>
+    </header>
+
+    <main class="contenedor">
+      <section class="caja-objetivos" aria-labelledby="obj-tit">
+        <h2 id="obj-tit">Objetivos de este manual</h2>
+        <ul>
+          <li>Comprender las cuatro fases del método de Pólya y las preguntas que definen cada una.</li>
+          <li>Disponer de estrategias concretas para enseñar el proceso en el aula, no solo el resultado.</li>
+          <li>Conocer la lógica de los tres niveles de dificultad del interactivo del estudiante.</li>
+          <li>Contar con una plantilla y una rúbrica para evaluar el proceso de resolución.</li>
+        </ul>
+      </section>
+
+      <nav class="toc" aria-labelledby="toc-tit">
+        <h2 id="toc-tit">Contenido</h2>
+        <ol>
+          <li><a href="#s1">Qué es el método de Pólya y por qué enseñarlo</a></li>
+          <li><a href="#s2">Las cuatro fases y sus preguntas guía</a></li>
+          <li><a href="#s3">La caja de heurísticas</a></li>
+          <li><a href="#s4">Cómo enseñarlo en el aula</a></li>
+          <li><a href="#s5">Los tres niveles del interactivo del estudiante</a></li>
+          <li><a href="#s6">Plantilla y rúbrica de las cuatro cajas</a></li>
+          <li><a href="#s7">Errores frecuentes y cómo intervenir</a></li>
+          <li><a href="#s8">Referencias</a></li>
+        </ol>
+      </nav>
+
+      <div class="controles">
+        <button class="btn" type="button" id="abrir-todo">Abrir todo</button>
+        <button class="btn" type="button" id="cerrar-todo">Cerrar todo</button>
+      </div>
+
+      <!-- 1 -->
+      <details class="seccion-grande" id="s1" open>
+        <summary>
+          <span class="circulo" aria-hidden="true">1</span>
+          Qué es el método de Pólya y por qué enseñarlo
+        </summary>
+        <div class="cuerpo-seccion">
+          <p>
+            El matemático húngaro George Pólya publicó en 1945 el libro
+            <em>How to Solve It</em>
+            , donde describió un método general para abordar problemas. Su gran aporte no fue inventar técnicas nuevas, sino
+            <strong>poner nombre y orden a lo que hacen los buenos resolvedores de problemas</strong>
+            , muchas veces sin darse cuenta.
+          </p>
+
+          <p>
+            Esto tiene una consecuencia pedagógica importante. Quien resuelve problemas con soltura ejecuta un proceso mental que casi nunca verbaliza; para el estudiante que observa, la solución
+            parece surgir "por arte de magia". La labor del docente es
+            <strong>hacer visible ese proceso invisible</strong>
+            : mostrar en voz alta las preguntas que uno se hace, las dudas, los tanteos y las verificaciones.
+          </p>
+
+          <div class="destacado">
+            <strong>Idea central:</strong>
+            no se enseña a resolver problemas mostrando soluciones perfectas, sino mostrando
+            <em>cómo se piensa</em>
+            mientras se resuelve, incluidos los titubeos y las correcciones.
+          </div>
+
+          <p>
+            Para la persona adulta que estudia para el GED, este enfoque desmonta una creencia muy común y muy paralizante: la de que "en matemática se sabe la respuesta o no se sabe". Pólya ofrece
+            una alternativa: siempre hay un procedimiento razonado por donde empezar.
+          </p>
+        </div>
+      </details>
+
+      <!-- 2 -->
+      <details class="seccion-grande" id="s2">
+        <summary>
+          <span class="circulo" aria-hidden="true">2</span>
+          Las cuatro fases y sus preguntas guía
+        </summary>
+        <div class="cuerpo-seccion">
+          <p>
+            El método se organiza en cuatro fases. Lo más útil para enseñarlas es memorizar las
+            <strong>preguntas</strong>
+            que caracterizan cada una: esas preguntas son la herramienta didáctica más poderosa que tiene el docente.
+          </p>
+
+          <table>
+            <caption>Tabla 1. Las cuatro fases del método de Pólya y sus preguntas guía.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Fase</th>
+                <th scope="col">Propósito</th>
+                <th scope="col">Preguntas guía</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><span class="fase-titulo" style="background: #1e3a8a">1. Comprender</span></th>
+                <td>Entender qué se pregunta antes de calcular nada.</td>
+                <td>¿Qué me piden (la incógnita)? ¿Qué datos tengo? ¿Qué condición los relaciona? ¿Puedo decir el problema con mis propias palabras? ¿Puedo hacer un dibujo?</td>
+              </tr>
+              <tr>
+                <th scope="row"><span class="fase-titulo" style="background: #0f5132">2. Planear</span></th>
+                <td>Decidir una estrategia antes de operar.</td>
+                <td>
+                  ¿He visto un problema parecido? ¿Puedo empezar por un caso más simple? ¿Me conviene una tabla, un dibujo, trabajar hacia atrás? ¿Qué operación conecta los datos con la incógnita?
+                </td>
+              </tr>
+              <tr>
+                <th scope="row"><span class="fase-titulo" style="background: #5b21b6">3. Ejecutar</span></th>
+                <td>Llevar a cabo el plan, comprobando cada paso.</td>
+                <td>¿Puedo ver con claridad que este paso es correcto? ¿Estoy siguiendo mi plan? Si no funciona, ¿pruebo otra estrategia?</td>
+              </tr>
+              <tr>
+                <th scope="row"><span class="fase-titulo" style="background: #5c3900">4. Revisar</span></th>
+                <td>Mirar hacia atrás y aprender del problema.</td>
+                <td>¿Tiene sentido mi respuesta? ¿Puedo verificarla de otra forma? ¿Podría haberlo resuelto de otro modo? ¿Me sirve este método para otros problemas?</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="destacado">
+            <strong>La fase que casi todos saltan.</strong>
+            Pólya consideraba la cuarta fase, "mirar hacia atrás", la más valiosa: es donde el estudiante
+            <em>aprende</em>
+            , no solo
+            <em>resuelve</em>
+            . Conviene defenderla en el aula y no permitir que la clase termine en cuanto aparece el número.
+          </div>
+        </div>
+      </details>
+
+      <!-- 3 -->
+      <details class="seccion-grande" id="s3">
+        <summary>
+          <span class="circulo c-verde" aria-hidden="true">3</span>
+          La caja de heurísticas
+        </summary>
+        <div class="cuerpo-seccion">
+          <p>
+            Dentro de la fase de planeación, conviene que el estudiante conozca por nombre un repertorio de estrategias (heurísticas), como un menú al que echar mano cuando no sabe por dónde empezar.
+            Estas son las mismas ocho estrategias que ofrece el interactivo del estudiante.
+          </p>
+
+          <table>
+            <caption>Tabla 2. Heurísticas frecuentes y cuándo resultan útiles.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Estrategia</th>
+                <th scope="col">Resulta útil cuando…</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Hacer un dibujo o diagrama</th>
+                <td>El problema describe formas, espacios o relaciones que se pueden representar visualmente (áreas, distancias, repartos).</td>
+              </tr>
+              <tr>
+                <th scope="row">Buscar un patrón</th>
+                <td>Hay una secuencia o una regularidad que se repite y permite predecir el siguiente valor.</td>
+              </tr>
+              <tr>
+                <th scope="row">Hacer una tabla o lista organizada</th>
+                <td>Hay muchos datos o combinaciones y conviene ordenarlos para no perderse.</td>
+              </tr>
+              <tr>
+                <th scope="row">Resolver un caso más simple</th>
+                <td>El problema es grande; probar con números pequeños revela cómo funciona.</td>
+              </tr>
+              <tr>
+                <th scope="row">Trabajar hacia atrás</th>
+                <td>Se conoce el resultado final y se busca un dato inicial (edades, promedios, cuentas al revés).</td>
+              </tr>
+              <tr>
+                <th scope="row">Tantear y ajustar</th>
+                <td>Se puede proponer una respuesta, comprobarla y corregir hasta acertar.</td>
+              </tr>
+              <tr>
+                <th scope="row">Plantear una operación o ecuación</th>
+                <td>La relación entre datos e incógnita se traduce directamente a una expresión aritmética o algebraica.</td>
+              </tr>
+              <tr>
+                <th scope="row">Usar una proporción (regla de tres)</th>
+                <td>Dos cantidades varían de forma proporcional (precios, recetas, escalas).</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            Es importante transmitir que
+            <strong>un mismo problema admite varias estrategias válidas</strong>
+            . No hay una única "correcta"; la mejor es la que al estudiante le resulte más clara.
+          </p>
+        </div>
+      </details>
+
+      <!-- 4 -->
+      <details class="seccion-grande" id="s4">
+        <summary>
+          <span class="circulo c-violeta" aria-hidden="true">4</span>
+          Cómo enseñarlo en el aula
+        </summary>
+        <div class="cuerpo-seccion">
+          <p>El "cómo" pesa más que el "qué". Estas cinco prácticas convierten a Pólya de una lista de pasos en una experiencia de aprendizaje.</p>
+
+          <h3>Modelar pensando en voz alta</h3>
+          <p>
+            Tome un problema y resuélvalo frente a la clase narrando sus dudas, no su certeza: "A ver… ¿qué me piden aquí? No estoy seguro, déjenme releer… bien, me piden esto. ¿Qué datos tengo?". Que
+            le vean titubear y recuperarse. Eso libera al estudiante de la vergüenza de no saber la respuesta al instante.
+          </p>
+
+          <h3>Un cartel ancla siempre visible</h3>
+          <p>Mantenga las cuatro fases con sus preguntas a la vista, en el aula o en el aula virtual, hasta que el proceso se vuelva automático. El estudiante lo consulta cada vez que se traba.</p>
+
+          <h3>Pedir el proceso, no solo el resultado</h3>
+          <p>
+            Solicite que se entregue el razonamiento en las cuatro cajas —Comprendo / Planeo / Ejecuto / Reviso— y no únicamente el número final. Esta es exactamente la disciplina que impone el
+            interactivo del estudiante: no permite avanzar de fase sin dejar el paso por escrito.
+          </p>
+
+          <h3>Elegir problemas "un poquito difíciles"</h3>
+          <p>
+            Si un problema se resuelve de un vistazo, el estudiante no necesita ningún método. La estrategia solo se aprende cuando hace falta. Conviene elegir problemas que obliguen a detenerse a
+            pensar.
+          </p>
+
+          <h3>Validar la intuición que ya traen</h3>
+          <p>
+            Muchas personas adultas aprendieron que la matemática es "seguir pasos memorizados". Recuérdeles que ya aplican Pólya en la vida diaria: cuando calculan si el dinero alcanza en el
+            supermercado o cuánto rinde una receta. Reconocer esa intuición previa aumenta la confianza.
+          </p>
+        </div>
+      </details>
+
+      <!-- 5 -->
+      <details class="seccion-grande" id="s5">
+        <summary>
+          <span class="circulo c-ambar" aria-hidden="true">5</span>
+          Los tres niveles del interactivo del estudiante
+        </summary>
+        <div class="cuerpo-seccion">
+          <p>
+            El interactivo que acompaña a este manual genera problemas y obliga al estudiante a dejar por escrito cada fase: el paso siguiente permanece bloqueado hasta que se completa el anterior. El
+            andamiaje se retira progresivamente en tres niveles.
+          </p>
+
+          <table>
+            <caption>Tabla 3. Andamiaje por nivel en el interactivo del estudiante.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Nivel</th>
+                <th scope="col">Qué ve el estudiante</th>
+                <th scope="col">Qué debe inferir</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1 · Guiado</th>
+                <td>Los datos aparecen ordenados en una lista para confirmar; hay pistas en cada fase y se señala la estrategia sugerida.</td>
+                <td>Casi nada: se concentra en escribir su razonamiento con apoyo.</td>
+              </tr>
+              <tr>
+                <th scope="row">2 · Intermedio</th>
+                <td>Los datos ya no vienen ordenados; el menú de estrategias no marca ninguna como sugerida.</td>
+                <td>Debe extraer los datos por su cuenta y elegir la estrategia sin ayuda.</td>
+              </tr>
+              <tr>
+                <th scope="row">3 · Autónomo</th>
+                <td>Solo el enunciado y las cuatro cajas en blanco, sin pistas.</td>
+                <td>Infiere todo el proceso y verifica por sí mismo si la respuesta es correcta.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="destacado">
+            <strong>Sugerencia de secuencia.</strong>
+            Comience la unidad en nivel guiado para toda la clase. Cuando observe que el estudiante ya no consulta las pistas, promuévalo al nivel intermedio, y reserve el autónomo como evidencia de
+            dominio.
+          </div>
+        </div>
+      </details>
+
+      <!-- 6 -->
+      <details class="seccion-grande" id="s6">
+        <summary>
+          <span class="circulo" aria-hidden="true">6</span>
+          Plantilla y rúbrica de las cuatro cajas
+        </summary>
+        <div class="cuerpo-seccion">
+          <p>
+            La siguiente plantilla puede imprimirse o proyectarse para el trabajo en papel; reproduce la misma estructura del interactivo. El estudiante escribe en cada casilla antes de pasar a la
+            siguiente.
+          </p>
+
+          <table>
+            <caption>Tabla 4. Plantilla de las cuatro cajas para el trabajo del estudiante.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Fase</th>
+                <th scope="col">Lo que escribo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1. Comprendo</th>
+                <td>Qué me piden (incógnita) y qué datos tengo.</td>
+              </tr>
+              <tr>
+                <th scope="row">2. Planeo</th>
+                <td>Qué estrategia elijo y cómo pienso resolverlo.</td>
+              </tr>
+              <tr>
+                <th scope="row">3. Ejecuto</th>
+                <td>Mis operaciones paso a paso y la respuesta final.</td>
+              </tr>
+              <tr>
+                <th scope="row">4. Reviso</th>
+                <td>Cómo compruebo que la respuesta es correcta y tiene sentido.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Para evaluar el proceso —no solo el resultado— puede emplearse esta rúbrica sencilla.</p>
+
+          <table>
+            <caption>Tabla 5. Rúbrica de proceso (4 puntos por fase, 16 en total).</caption>
+            <thead>
+              <tr>
+                <th scope="col">Criterio</th>
+                <th scope="col">Logrado (4)</th>
+                <th scope="col">En proceso (2)</th>
+                <th scope="col">Inicial (0)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Comprende</th>
+                <td>Identifica con claridad incógnita y datos.</td>
+                <td>Identifica una de las dos cosas.</td>
+                <td>No distingue qué se pide de qué se da.</td>
+              </tr>
+              <tr>
+                <th scope="row">Planea</th>
+                <td>Elige una estrategia pertinente y la describe.</td>
+                <td>Elige estrategia pero no explica el plan.</td>
+                <td>Opera sin plan explícito.</td>
+              </tr>
+              <tr>
+                <th scope="row">Ejecuta</th>
+                <td>Muestra el procedimiento completo y correcto.</td>
+                <td>Muestra pasos con algún error.</td>
+                <td>Solo escribe la respuesta, sin procedimiento.</td>
+              </tr>
+              <tr>
+                <th scope="row">Revisa</th>
+                <td>Verifica el resultado y juzga si tiene sentido.</td>
+                <td>Comprueba de forma superficial.</td>
+                <td>No revisa.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <!-- 7 -->
+      <details class="seccion-grande" id="s7">
+        <summary>
+          <span class="circulo" aria-hidden="true">7</span>
+          Errores frecuentes y cómo intervenir
+        </summary>
+        <div class="cuerpo-seccion">
+          <table>
+            <caption>Tabla 6. Dificultades habituales del estudiante adulto y respuesta docente.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Lo que hace el estudiante</th>
+                <th scope="col">Cómo intervenir</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Calcula de inmediato, sin leer bien.</th>
+                <td>Pídale que tape los números y explique con palabras qué se pregunta antes de operar.</td>
+              </tr>
+              <tr>
+                <th scope="row">Dice "no sé por dónde empezar".</th>
+                <td>Ofrézcale el menú de heurísticas y sugiera empezar por un dibujo o por un caso más simple.</td>
+              </tr>
+              <tr>
+                <th scope="row">Se rinde tras un intento fallido.</th>
+                <td>Normalice el error: un plan que falla es información, no fracaso. Invítele a probar otra estrategia.</td>
+              </tr>
+              <tr>
+                <th scope="row">Entrega solo el número final.</th>
+                <td>Devuelva el trabajo pidiendo las cuatro cajas; el interactivo ya obliga a este hábito.</td>
+              </tr>
+              <tr>
+                <th scope="row">No revisa el resultado.</th>
+                <td>Pregunte "¿tiene sentido esa cantidad?" con un caso absurdo (por ejemplo, una edad negativa) para que note la utilidad de revisar.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <!-- 8 -->
+      <details class="seccion-grande" id="s8">
+        <summary>
+          <span class="circulo" aria-hidden="true">8</span>
+          Referencias
+        </summary>
+        <div class="cuerpo-seccion">
+          <ul class="limpia">
+            <li>
+              Pólya, G. (1945).
+              <em>How to Solve It: A New Aspect of Mathematical Method</em>
+              . Princeton University Press.
+            </li>
+            <li>
+              Pólya, G. (1965).
+              <em>Cómo plantear y resolver problemas</em>
+              (traducción al español). Editorial Trillas.
+            </li>
+          </ul>
+          <p>El interactivo del estudiante que acompaña a este manual aplica directamente las cuatro fases aquí descritas, con andamiaje graduado en tres niveles.</p>
+        </div>
+      </details>
+
+      <footer class="pie">
+        <p>Obra de José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago.</p>
+        <p>
+          Bajo licencia
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license">Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)</a>
+          .
+        </p>
+      </footer>
+    </main>
+
+    <script>
+      (function () {
+        'use strict';
+        var secciones = Array.prototype.slice.call(document.querySelectorAll('details.seccion-grande'));
+
+        document.getElementById('abrir-todo').addEventListener('click', function () {
+          secciones.forEach(function (d) {
+            d.open = true;
+          });
+        });
+        document.getElementById('cerrar-todo').addEventListener('click', function () {
+          secciones.forEach(function (d) {
+            d.open = false;
+          });
+        });
+
+        // TOC: al hacer clic, auto-abrir la sección destino
+        document.querySelectorAll('nav.toc a').forEach(function (a) {
+          a.addEventListener('click', function () {
+            var id = a.getAttribute('href').slice(1);
+            var d = document.getElementById(id);
+            if (d && d.tagName.toLowerCase() === 'details') {
+              d.open = true;
+            }
+          });
+        });
+
+        // Soporte de hash en la URL: abrir la sección indicada al cargar
+        function abrirPorHash() {
+          if (location.hash) {
+            var d = document.getElementById(location.hash.slice(1));
+            if (d && d.tagName.toLowerCase() === 'details') {
+              d.open = true;
+              d.scrollIntoView({behavior: 'smooth', block: 'start'});
+            }
+          }
+        }
+        window.addEventListener('hashchange', abrirPorHash);
+        abrirPorHash();
+      })();
+    </script>
+  </body>
+</html>
 
